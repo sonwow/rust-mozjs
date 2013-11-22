@@ -3,7 +3,7 @@ VPATH=%VPATH%
 CXX ?= g++
 RUSTC ?= rustc
 AR ?= ar
-RUSTFLAGS ?=
+RUSTFLAGS ?= -L ../mozjs/js/src/dist/lib
 CFLAGS += -fPIC
 
 ifeq ($(shell $(CXX) -v 2>&1 | grep -c 'clang version\|Apple.*clang'),1)
@@ -11,6 +11,7 @@ CFLAGS += -Wno-c++0x-extensions -Wno-return-type-c-linkage -Wno-invalid-offsetof
 endif
 
 RUST_SRC = $(shell find $(VPATH)/. -type f -name '*.rs')
+CFLAGS_MOZJS = ../mozjs/js/src/dist/include
 
 .PHONY: all
 all: libjs.dummy
@@ -26,7 +27,7 @@ libjsglue.a: jsglue.o
 	$(AR) rcs libjsglue.a jsglue.o
 
 jsglue.o: jsglue.cpp
-	$(CXX) $(CFLAGS) -fno-rtti $< -o $@ -c
+	$(CXX) $(CFLAGS) -fno-rtti $< -o $@ -c -I$(CFLAGS_MOZJS)
 
 check: js-test
 	./js-test

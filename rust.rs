@@ -206,7 +206,7 @@ impl Cx {
         do script.to_utf16().as_imm_buf |script_ptr, script_len| {
             do filename.to_c_str().with_ref |filename_cstr| {
                 let rval: JSVal = JSVAL_NULL;
-                debug!("Evaluating script from {:s} with content {}", filename, script);
+                debug!("Evaluating script from %? with content %?", filename, script);
                 unsafe {
                     if ERR == JS_EvaluateUCScript(self.ptr, glob.ptr,
                                                   script_ptr, script_len as c_uint,
@@ -259,7 +259,7 @@ pub extern fn reportError(_cx: *JSContext, msg: *c_char, report: *JSErrorReport)
         let fname = if fnptr.is_not_null() {from_c_str(fnptr)} else {~"none"};
         let lineno = (*report).lineno;
         let msg = from_c_str(msg);
-        error!("Error at {:s}:{}: {:s}\n", fname, lineno, msg);
+        error!("Error at %?:%?: %?\n", fname, lineno, msg);
     }
 }
 
